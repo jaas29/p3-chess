@@ -1,7 +1,12 @@
 {
-  // clangd needs to know which build directory holds compile_commands.json,
-  // or it cannot resolve #include "rt/vec3.h" and underlines correct code in red.
-  // Point it at the everyday build.
+  // The editor's red underlines come from the Microsoft C/C++ extension (cpptools),
+  // not the compiler. Point it at the flags CMake really uses (build/dev), so it
+  // knows about -std=c++20 and the include/ folder. A new .cpp file only gets the
+  // right flags after it is in CMakeLists.txt and the project has been built once.
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/dev/compile_commands.json",
+  "C_Cpp.default.cppStandard": "c++20",
+
+  // Same thing for clangd, in case it is ever installed.
   "clangd.arguments": [
     "--compile-commands-dir=${workspaceFolder}/build/dev",
     "--header-insertion=never"

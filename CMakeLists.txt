@@ -15,3 +15,4 @@ endfunction()
 
 chess_target(bitboard_test tests/bitboard_test.cpp)
 chess_target(board_test tests/board_test.cpp)
+chess_target(attacks_test tests/attacks_test.cpp)
