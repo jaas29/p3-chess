@@ -16,6 +16,6 @@ int main()
 
     b.place(Piece::B_king, 60); // black king on e8
     assert(b.piece_at(60) == Piece::B_king);
-
+    b.print();
     std::cout << "board_test: all passed\n";
 }

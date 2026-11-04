@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include "chess/bitboard.h"
-
+#include <iostream>
 namespace chess
 {
 
@@ -45,6 +45,28 @@ namespace chess
                 }
             }
             return Piece::No_piece;
+        }
+        static char piece_char(Piece p)
+        {
+            if (p == Piece::No_piece)
+            {
+                return '.';
+            }
+            return "PNBRQKpnbrqk"[static_cast<int>(p)];
+        }
+        void print() const
+        {
+            for (int rank = 7; rank >= 0; rank--)
+            {
+                std::cout << rank + 1 << "  ";
+                for (int file = 0; file < 8; file++)
+                {
+                    int sq = rank * 8 + file;
+                    std::cout << piece_char(piece_at(sq)) << " ";
+                }
+                std::cout << '\n';
+            }
+            std::cout << "   a b c d e f g h\n";
         }
     };
 }
