@@ -2,6 +2,7 @@
 #include <array>
 #include "chess/bitboard.h"
 #include <iostream>
+#include <string_view>
 namespace chess
 {
 
@@ -53,6 +54,48 @@ namespace chess
                 return '.';
             }
             return "PNBRQKpnbrqk"[static_cast<int>(p)];
+        }
+
+        //'N' -> Piece::W_Knight. Anything that isn't a piece letter -> No piece
+        static Piece piece_from_char(char c)
+        {
+            const std::string_view letters = "PNBRQKpnbrqk";
+            const auto i = letters.find(c);
+            if (i == std::string_view::npos)
+            {
+                return Piece::No_piece;
+            }
+            return static_cast<Piece>(i);
+        }
+
+        static Board from_fen(std::string_view fen)
+        {
+            Board b;
+            int rank = 7; // rank 8= index 7
+            int file = 0;
+
+            for (char c : fen)
+            {
+                if (c == ' ')
+                {
+                    break;
+                }
+                else if (c == '/')
+                {
+                    rank = rank - 1;
+                    file = 0;
+                }
+                else if (c >= '1' && c <= '8')
+                {
+                    file += c - '0';
+                }
+                else
+                {
+                    b.place(piece_from_char(c), rank * 8 + file);
+                    file++;
+                }
+            }
+            return b;
         }
         void print() const
         {
