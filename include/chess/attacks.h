@@ -3,6 +3,25 @@
 
 namespace chess
 {
+
+    constexpr Bitboard FILE_A = 0x0101010101010101;
+    constexpr Bitboard FILE_H = 0x8080808080808080;
+
+    // All white pawns pushed one squared forward, onto emptyu squares only.
+    inline Bitboard white_pawn_pushes(Bitboard pawns, Bitboard empty)
+    {
+        return (pawns << 8) & empty;
+    }
+    // Sqaures white pawns attacj up right. h-file pawns removed first: no wrap
+    inline Bitboard white_pawn_attacks_right(Bitboard pawns)
+    {
+        return (pawns & ~FILE_H) << 9;
+    }
+    inline Bitboard white_pawn_attacks_left(Bitboard pawns)
+    {
+        return (pawns & ~FILE_A) << 7;
+    }
+
     // Every square a knight on sq could jump to (ignoring whats on those squares).
     inline Bitboard knight_attacks(int sq)
     {
