@@ -13,3 +13,4 @@ jobs:
       - name: Unit tests
         run: |
           ./build/dev/bitboard_test
+          ./build/dev/board_test
