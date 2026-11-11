@@ -23,11 +23,23 @@ namespace chess
         Count,
         No_piece
     };
+    enum class Color
+    {
+        White,
+        Black,
+    };
+
+    constexpr int CASTLE_WK = 1;
+    constexpr int CASTLE_WQ = 2;
+    constexpr int CASTLE_BK = 4;
+    constexpr int CASTLE_BQ = 8;
 
     struct Board
     {
         // 12 sheets, one per piece. {}makes every sheet 0 = no holes = emptyboard
         std::array<Bitboard, static_cast<int>(Piece::Count)> pieces{};
+        int castling = 0;
+        Color side_to_move = Color::White;
 
         // put piece p on square sq. Uses place_piece form bitboard.h
         void place(Piece p, int sq)
@@ -93,6 +105,34 @@ namespace chess
                 {
                     b.place(piece_from_char(c), rank * 8 + file);
                     file++;
+                }
+                const std::size_t pos = fen.find(' ');
+
+                if (fen[pos + 1] == 'b')
+                {
+                    b.side_to_move = Color::Black;
+                }
+                std::size_t i = pos + 3;
+                while (i < fen.size() && fen[i] != ' ')
+                {
+                    const char c = fen[i];
+                    if (c == 'K')
+                    {
+                        b.castling |= CASTLE_WK;
+                    }
+                    else if (c == 'Q')
+                    {
+                        b.castling |= CASTLE_WQ;
+                    }
+                    else if (c == 'k')
+                    {
+                        b.castling |= CASTLE_BK;
+                    }
+                    else if (c == 'q')
+                    {
+                        b.castling |= CASTLE_BQ;
+                    }
+                    i++;
                 }
             }
             return b;

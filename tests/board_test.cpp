@@ -62,6 +62,15 @@ int main()
   // h8 (63), the top-right corner and the very last bit: a black rook.
   assert(s.piece_at(63) == Piece::B_rook);
 
+  assert(s.side_to_move == Color::White);
+  assert(s.castling == 15);
+  const Board e = Board::from_fen("8/8/8/8/8/8/8/8 b Kq - 0 1");
+  assert(e.side_to_move == Color::Black);
+  assert(e.castling == 9);
+
+  const Board p = Board::from_fen("8/8/8/8/8/8/8/8 b Qk - 0 1");
+  assert(p.side_to_move == Color::Black);
+  assert(p.castling == 6);
   // Draw the start position on the screen.
   s.print();
 
