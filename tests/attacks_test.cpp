@@ -65,6 +65,14 @@ int main()
     // And it has exactly 3 moves: g1, g2, h2.
     assert(std::popcount(king_attacks(7)) == 3);
 
+    // Rook
+    const Bitboard occ = square_mask(43) | square_mask(29);
+    const Bitboard r_d4 = rook_attacks(27, occ); // save the result in a box
+    assert(std::popcount(rook_attacks(r_d4)) == 10);
+
+    assert(has_piece(r_d4, 43));
+    assert(!has_piece(r_d4, 51));
+
     // ---------- PAWN PUSHES ----------
 
     // 0xFF00 = all 8 white pawns on rank 2 (bits 8 to 15).
