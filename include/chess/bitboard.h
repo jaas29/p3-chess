@@ -8,9 +8,6 @@ namespace chess
     // One bit per square. Square numbers: sq = rank * 8 + file, a1 = 0, h1 = 7, a2 = 8, h8 = 63.
     using Bitboard = std::uint64_t;
 
-    // Write these four functions. Each one is a single line in its body.
-    // Each one takes its inputs by value and returns a result; none of them changes its input.
-    //
     // 1. square_mask(sq)       -> a Bitboard with only bit sq set (one hole in the sheet).
     inline Bitboard square_mask(int sq)
     {
@@ -32,7 +29,5 @@ namespace chess
     {
         return b & ~square_mask(sq);
     }
-    //
-    // Square numbers are plain int for now.
 
-} // namespace chess
+}
