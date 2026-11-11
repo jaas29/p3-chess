@@ -22,6 +22,18 @@ namespace chess
         return (pawns & ~FILE_A) << 7;
     }
 
+    inline Bitboard black_pawn_pushes(Bitboard pawns, Bitboard empty)
+    {
+        return (pawns >> 8) & empty;
+    }
+    inline Bitboard black_pawn_attacks_left(Bitboard pawns)
+    {
+        return (pawns & ~FILE_A) >> 9;
+    }
+    inline Bitboard black_pawn_attacks_right(Bitboard pawns)
+    {
+        return (pawns & ~FILE_H) >> 7;
+    }
     // Every square a knight on sq could jump to (ignoring whats on those squares).
     inline Bitboard knight_attacks(int sq)
     {

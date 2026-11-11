@@ -102,6 +102,41 @@ int main()
     // ...and up-right onto f3 (21).
     assert(white_pawn_attacks_right(square_mask(12)) == square_mask(21));
 
+    // ---------- BLACK PAWNS: the mirror image ----------
+    // Black moves DOWN the board, so every shift is >> (square number gets smaller).
+    // "left" and "right" are as seen on the printed board, same as white:
+    // left = toward the a-file, right = toward the h-file.
+
+    // A black pawn on e7 (52), every square empty: one push lands on e6 (44).
+    assert(black_pawn_pushes(square_mask(52), ~Bitboard{0}) == square_mask(44));
+
+    // All 8 black pawns on rank 7 (0x00FF000000000000), every square empty:
+    // they all land on rank 6 (0x0000FF0000000000).
+    assert(black_pawn_pushes(0x00FF000000000000, ~Bitboard{0}) == 0x0000FF0000000000);
+
+    // Same pawns, but e6 (44) is occupied: the e-pawn is blocked.
+    assert(black_pawn_pushes(0x00FF000000000000, ~square_mask(44)) == (0x0000FF0000000000 & ~square_mask(44)));
+
+    // A black pawn on e7 (52) captures down-left onto d6 (43, = 52 - 9)...
+    assert(black_pawn_attacks_left(square_mask(52)) == square_mask(43));
+
+    // ...and down-right onto f6 (45, = 52 - 7).
+    assert(black_pawn_attacks_right(square_mask(52)) == square_mask(45));
+
+    // A black pawn on a7 (48) has nothing to its left. Without the FILE_A mask,
+    // >> 9 would wrap it to h5 (39).
+    assert(black_pawn_attacks_left(square_mask(48)) == 0);
+
+    // Its only capture is down-right, onto b6 (41).
+    assert(black_pawn_attacks_right(square_mask(48)) == square_mask(41));
+
+    // A black pawn on h7 (55) has nothing to its right. Without the FILE_H mask,
+    // >> 7 would wrap it to a7 (48).
+    assert(black_pawn_attacks_right(square_mask(55)) == 0);
+
+    // Its only capture is down-left, onto g6 (46).
+    assert(black_pawn_attacks_left(square_mask(55)) == square_mask(46));
+
     // We only get here if every assert above was true.
     std::cout << "attacks_test: all passed\n";
 }
