@@ -99,6 +99,34 @@ namespace chess
         return result;
     }
 
+    inline Bitboard bishop_attacks(int sq, Bitboard occupied)
+    {
+        const int rank = sq / 8;
+        const int file = sq % 8;
+
+        constexpr int directions[4][2] = {{+1, +1}, {+1, -1}, {-1, +1}, {-1, -1}};
+        Bitboard result = 0;
+        for (const auto &d : directions)
+        {
+            int r = rank;
+            int f = file;
+            while (true)
+            {
+                r += d[0];
+                f += d[1];
+                if (r < 0 || r > 7 || f < 0 || f > 7)
+                {
+                    break;
+                }
+                result = place_piece(result, r * 8 + f);
+                if (has_piece(occupied, r * 8 + f))
+                {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
     inline Bitboard king_attacks(int sq)
     {
         const int rank = sq / 8;

@@ -68,10 +68,18 @@ int main()
     // Rook
     const Bitboard occ = square_mask(43) | square_mask(29);
     const Bitboard r_d4 = rook_attacks(27, occ); // save the result in a box
-    assert(std::popcount(rook_attacks(r_d4)) == 10);
+    assert(std::popcount(r_d4) == 10);
 
     assert(has_piece(r_d4, 43));
     assert(!has_piece(r_d4, 51));
+
+    // bishop
+    const Bitboard empty_board = 0;
+    const Bitboard b_d4 = bishop_attacks(27, empty_board);
+    assert(std::popcount(b_d4) == 13);
+    const Bitboard occu = square_mask(45);
+    const Bitboard b_d4_blocked = bishop_attacks(27, occu);
+    assert(has_piece(b_d4_blocked, 45));
 
     // ---------- PAWN PUSHES ----------
 
