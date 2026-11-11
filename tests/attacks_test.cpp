@@ -137,6 +137,32 @@ int main()
     // Its only capture is down-left, onto g6 (46).
     assert(black_pawn_attacks_left(square_mask(55)) == square_mask(46));
 
+    // ---------- DOUBLE PUSHES ----------
+
+    // A white pawn on e2 (12), everything empty: it can go two squares, to e4 (28).
+    assert(white_pawn_double_pushes(square_mask(12), ~Bitboard{0}) == square_mask(28));
+
+    // Same pawn, but a piece sits on e3 (20): it cannot jump over it. No double push.
+    assert(white_pawn_double_pushes(square_mask(12), ~square_mask(20)) == 0);
+
+    // Same pawn, e3 empty but e4 (28) occupied: the landing square is blocked. No double push.
+    assert(white_pawn_double_pushes(square_mask(12), ~square_mask(28)) == 0);
+
+    // A white pawn on e3 (20) has already moved: no double push, even on an empty board.
+    assert(white_pawn_double_pushes(square_mask(20), ~Bitboard{0}) == 0);
+
+    // All 8 white pawns on rank 2, everything empty: all 8 land on rank 4 (bits 24 to 31).
+    assert(white_pawn_double_pushes(0xFF00, ~Bitboard{0}) == 0xFF000000);
+
+    // A black pawn on e7 (52), everything empty: two squares down, to e5 (36).
+    assert(black_pawn_double_pushes(square_mask(52), ~Bitboard{0}) == square_mask(36));
+
+    // Same pawn, a piece on e6 (44): blocked, no double push.
+    assert(black_pawn_double_pushes(square_mask(52), ~square_mask(44)) == 0);
+
+    // A black pawn on e6 (44) has already moved: no double push.
+    assert(black_pawn_double_pushes(square_mask(44), ~Bitboard{0}) == 0);
+
     // We only get here if every assert above was true.
     std::cout << "attacks_test: all passed\n";
 }
