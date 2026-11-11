@@ -80,6 +80,11 @@ int main()
     const Bitboard occu = square_mask(45);
     const Bitboard b_d4_blocked = bishop_attacks(27, occu);
     assert(has_piece(b_d4_blocked, 45));
+    assert(!has_piece(b_d4_blocked, 54));
+
+    // queen
+    const Bitboard q_d4 = queen_attacks(27, empty_board);
+    assert(std::popcount(q_d4) == 27);
 
     // ---------- PAWN PUSHES ----------
 

@@ -127,6 +127,10 @@ namespace chess
         }
         return result;
     }
+    inline Bitboard queen_attacks(int sq, Bitboard occupied)
+    {
+        return rook_attacks(sq, occupied) | bishop_attacks(sq, occupied);
+    }
     inline Bitboard king_attacks(int sq)
     {
         const int rank = sq / 8;
