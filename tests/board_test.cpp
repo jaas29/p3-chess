@@ -71,6 +71,14 @@ int main()
   const Board p = Board::from_fen("8/8/8/8/8/8/8/8 b Qk - 0 1");
   assert(p.side_to_move == Color::Black);
   assert(p.castling == 6);
+  // en passant square (FEN field 4)
+  assert(s.ep_square == -1);
+
+  const Board ep1 = Board::from_fen("8/8/8/8/8/8/8/8 w - e3 0 1");
+  assert(ep1.ep_square == 20);
+
+  const Board ep2 = Board::from_fen("8/8/8/8/8/8/8/8 b - d6 0 1");
+  assert(ep2.ep_square == 43);
   // Draw the start position on the screen.
   s.print();
 

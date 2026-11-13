@@ -39,6 +39,7 @@ namespace chess
         // 12 sheets, one per piece. {}makes every sheet 0 = no holes = emptyboard
         std::array<Bitboard, static_cast<int>(Piece::Count)> pieces{};
         int castling = 0;
+        int ep_square = -1;
         Color side_to_move = Color::White;
 
         // put piece p on square sq. Uses place_piece form bitboard.h
@@ -135,6 +136,14 @@ namespace chess
                 }
                 i++;
             }
+            // field 4 en passant square
+            if (fen[i + 1] != '-')
+            {
+                file = fen[i + 1] - 'a';
+                rank = fen[i + 2] - '1';
+                b.ep_square = rank * 8 + file;
+            }
+
             return b;
         }
         void print() const
