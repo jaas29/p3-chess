@@ -106,34 +106,34 @@ namespace chess
                     b.place(piece_from_char(c), rank * 8 + file);
                     file++;
                 }
-                const std::size_t pos = fen.find(' ');
+            }
+            const std::size_t pos = fen.find(' ');
 
-                if (fen[pos + 1] == 'b')
+            if (fen[pos + 1] == 'b')
+            {
+                b.side_to_move = Color::Black;
+            }
+            std::size_t i = pos + 3;
+            while (i < fen.size() && fen[i] != ' ')
+            {
+                const char c = fen[i];
+                if (c == 'K')
                 {
-                    b.side_to_move = Color::Black;
+                    b.castling |= CASTLE_WK;
                 }
-                std::size_t i = pos + 3;
-                while (i < fen.size() && fen[i] != ' ')
+                else if (c == 'Q')
                 {
-                    const char c = fen[i];
-                    if (c == 'K')
-                    {
-                        b.castling |= CASTLE_WK;
-                    }
-                    else if (c == 'Q')
-                    {
-                        b.castling |= CASTLE_WQ;
-                    }
-                    else if (c == 'k')
-                    {
-                        b.castling |= CASTLE_BK;
-                    }
-                    else if (c == 'q')
-                    {
-                        b.castling |= CASTLE_BQ;
-                    }
-                    i++;
+                    b.castling |= CASTLE_WQ;
                 }
+                else if (c == 'k')
+                {
+                    b.castling |= CASTLE_BK;
+                }
+                else if (c == 'q')
+                {
+                    b.castling |= CASTLE_BQ;
+                }
+                i++;
             }
             return b;
         }
