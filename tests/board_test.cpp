@@ -81,6 +81,10 @@ int main()
   assert(ep2.ep_square == 43);
   // Draw the start position on the screen.
   s.print();
+  // white = ranks 1 and 2 = squares 0-15 = 0xFFFF
+  assert(s.color_pieces(Color::White) == 0xFFFFULL);
+  // black = ranks 7 and 8 = squares 48-63 = 0xFFFF000000000000
+  assert(s.color_pieces(Color::Black) == 0xFFFF000000000000ULL);
 
   std::cout << "board_test: all passed\n";
 }

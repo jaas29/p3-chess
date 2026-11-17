@@ -48,6 +48,21 @@ namespace chess
             const int i = static_cast<int>(p);      // enum -> index
             pieces[i] = place_piece(pieces[i], sq); // plae_piece return a NEW value; store it
         }
+        // every square holding a piece of color c: the 6 sheets of c OR'd together
+        Bitboard color_pieces(Color c) const
+        {
+            int start = 0;
+            if (c == Color::Black)
+            {
+                start = 6;
+            }
+            Bitboard result = 0;
+            for (int i = start; i < start + 6; i++)
+            {
+                result |= pieces[i];
+            }
+            return result;
+        }
 
         Piece piece_at(int sq) const
         {

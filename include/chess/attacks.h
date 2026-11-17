@@ -70,6 +70,14 @@ namespace chess
         return result;
     }
 
+    // squares a knight on sq can move to: its jumps, minus squares its own side occupies
+    inline Bitboard knight_targets(int sq, Bitboard own)
+    {
+        const Bitboard jumps = knight_attacks(sq);
+        const Bitboard not_own = ~own;
+        return jumps & not_own;
+    }
+
     inline Bitboard rook_attacks(int sq, Bitboard occupied)
     {
         const int rank = sq / 8;
@@ -97,6 +105,12 @@ namespace chess
             }
         }
         return result;
+    }
+    inline Bitboard rook_targets(int sq, Bitboard occupied, Bitboard own)
+    {
+        const Bitboard rays = rook_attacks(sq, occupied);
+        const Bitboard not_own = ~own;
+        return rays & not_own;
     }
 
     inline Bitboard bishop_attacks(int sq, Bitboard occupied)
@@ -127,9 +141,21 @@ namespace chess
         }
         return result;
     }
+    inline Bitboard bishop_targets(int sq, Bitboard occupied, Bitboard own)
+    {
+        const Bitboard rays = bishop_attacks(sq, occupied);
+        const Bitboard not_own = ~own;
+        return rays & not_own;
+    }
     inline Bitboard queen_attacks(int sq, Bitboard occupied)
     {
         return rook_attacks(sq, occupied) | bishop_attacks(sq, occupied);
+    }
+    inline Bitboard queen_targets(int sq, Bitboard occupied, Bitboard own)
+    {
+        const Bitboard rays = queen_attacks(sq, occupied);
+        const Bitboard not_own = ~own;
+        return rays & not_own;
     }
     inline Bitboard king_attacks(int sq)
     {
@@ -148,6 +174,13 @@ namespace chess
             }
         }
         return result;
+    }
+
+    inline Bitboard king_targets(int sq, Bitboard own)
+    {
+        const Bitboard jumps = king_attacks(sq);
+        const Bitboard not_own = ~own;
+        return jumps & not_own;
     }
 
 }
