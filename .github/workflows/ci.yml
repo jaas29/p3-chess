@@ -16,3 +16,4 @@ jobs:
           ./build/dev/board_test
           ./build/dev/attacks_test
           ./build/dev/move_test
+          ./build/dev/movegen_test
