@@ -41,12 +41,18 @@ namespace chess
         int castling = 0;
         int ep_square = -1;
         Color side_to_move = Color::White;
+        bool operator==(const Board &) const = default; // compare every member
 
         // put piece p on square sq. Uses place_piece form bitboard.h
         void place(Piece p, int sq)
         {
             const int i = static_cast<int>(p);      // enum -> index
             pieces[i] = place_piece(pieces[i], sq); // plae_piece return a NEW value; store it
+        }
+        void remove(Piece p, int sq)
+        {
+            const int i = static_cast<int>(p);
+            pieces[i] = remove_piece(pieces[i], sq);
         }
         // every square holding a piece of color c: the 6 sheets of c OR'd together
         Bitboard color_pieces(Color c) const
