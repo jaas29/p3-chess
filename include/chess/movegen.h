@@ -177,4 +177,50 @@ namespace chess
 
         return moves;
     }
+
+    inline bool is_square_attacked(const Board &b, int sq, Color by)
+    {
+        const Bitboard occupied = b.color_pieces(Color::White) | b.color_pieces(Color::Black);
+
+        // the 6 sheets of the attackers: white = 0...5, black = 6..11
+        int base = 0;
+        if (by == Color::Black)
+        {
+            base = 6;
+        }
+        const Bitboard pawns = b.pieces[base + 0];
+        const Bitboard knights = b.pieces[base + 1];
+        const Bitboard bishops = b.pieces[base + 2];
+        const Bitboard rooks = b.pieces[base + 3];
+        const Bitboard queens = b.pieces[base + 4];
+        const Bitboard king = b.pieces[base + 5];
+
+        // fake knight on sq
+        if ((knight_attacks(sq) & knights) != 0)
+            return true;
+        // fake bishop: bishops AND queens move diagonally
+        if ((bishop_attacks(sq, occupied) & (bishops | queens)) != 0)
+            return true;
+        // fake rook: rooks AND queens move straight
+        if ((rook_attacks(sq, occupied) & (rooks | queens)) != 0)
+            return true;
+        // fake king
+        if ((king_attacks(sq) & king) != 0)
+            return true;
+        // fake pawn: pretend to be the OTHER colour's pawn standinng on sq
+        const Bitboard here = square_mask(sq);
+        Bitboard pawn_spots = 0;
+        if (by == Color::Black)
+        {
+            pawn_spots = white_pawn_attacks_left(here) | white_pawn_attacks_right(here);
+        }
+        else
+        {
+            pawn_spots = black_pawn_attacks_left(here) | black_pawn_attacks_right(here);
+        }
+        if ((pawn_spots & pawns) != 0)
+            return true;
+
+        return false;
+    }
 }

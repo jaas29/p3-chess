@@ -91,5 +91,21 @@ int main()
     // same position, black to move: also 20
     const Board s_black = Board::from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1");
     assert(generate_moves(s_black).size() == 20);
+
+    // knight on f3 attacks e5; nothing white attacks e6
+    Board k = Board::from_fen("4k3/8/8/8/8/5N2/8/4K3 w - - 0 1");
+    assert(is_square_attacked(k, 36, Color::White));  // e5 = 4*8+4
+    assert(!is_square_attacked(k, 44, Color::White)); // e6
+
+    // rook on a1 attacks a8, unless something stands in between
+    Board r = Board::from_fen("4k3/8/8/8/8/8/8/R3K3 w - - 0 1");
+    assert(is_square_attacked(r, 56, Color::White)); // a8
+    Board rb = Board::from_fen("4k3/8/8/8/P7/8/8/R3K3 w - - 0 1");
+    assert(!is_square_attacked(rb, 56, Color::White)); // a8, the pawn on a4 blocks
+
+    // black pawn on d5 attacks e4, not d4
+    Board p = Board::from_fen("4k3/8/8/3p4/8/8/8/4K3 w - - 0 1");
+    assert(is_square_attacked(p, 28, Color::Black));  // e4
+    assert(!is_square_attacked(p, 27, Color::Black)); // d4: pawns don't capture straight
     std::cout << "movegen_test: all passed\n";
 }
