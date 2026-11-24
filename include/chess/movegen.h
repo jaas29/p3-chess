@@ -4,6 +4,7 @@
 #include "chess/move.h"
 #include <vector>
 #include <bit>
+#include "chess/makemove.h"
 namespace chess
 {
     // add every knight move for side to moves
@@ -222,5 +223,33 @@ namespace chess
             return true;
 
         return false;
+    }
+    // only the moves that don't leave our own king attacked
+    inline std::vector<Move> generate_legal_moves(Board &b)
+    {
+        std::vector<Move> legal;
+        const Color us = b.side_to_move;
+        Color them = Color::White;
+        if (us == Color::White)
+        {
+            them = Color::Black;
+        }
+        // our king's sheet: W_king or B_king
+        Piece our_king = Piece::W_king;
+        if (us == Color::Black)
+        {
+            our_king = Piece::B_king;
+        }
+        for (const Move &m : generate_moves(b))
+        {
+            Undo u = make_move(b, m);
+            const int king_sq = std::countr_zero(b.pieces[static_cast<int>(our_king)]);
+            if (!is_square_attacked(b, king_sq, them))
+            {
+                legal.push_back(m);
+            }
+            unmake_move(b, m, u);
+        }
+        return legal;
     }
 }

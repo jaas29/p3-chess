@@ -14,7 +14,7 @@ namespace chess
         }
 
         std::uint64_t nodes = 0;
-        for (const Move &m : generate_moves(b))
+        for (const Move &m : generate_legal_moves(b))
         {
             Undo u = make_move(b, m);
             nodes += perft(b, depth - 1); // count everything below this move
