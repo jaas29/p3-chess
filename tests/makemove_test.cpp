@@ -8,11 +8,14 @@ using namespace chess;
 int main()
 {
     Board b = Board::from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-    Move m{12, 28};
+    Move m{12, 28, Piece::No_piece, MoveFlag::DoublePush};
+
     make_move(b, m);
     assert(b.piece_at(12) == Piece::No_piece);
     assert(b.piece_at(28) == Piece::W_pawn);
     assert(b.side_to_move == Color::Black);
+    // double push sets the ep square (e3)
+    assert(b.ep_square == 20);
 
     Board c = Board::from_fen("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2");
     Move p{28, 35};
@@ -33,4 +36,14 @@ int main()
     Undo u2 = make_move(r2, p);
     unmake_move(r2, p, u2);
     assert(r2 == before2);
+    // e5xd6 en passant: lands on d6, removes the black pawn on d5
+    Board e = Board::from_fen("rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3");
+    Board e_before = e;
+    Move ep{36, 43, Piece::No_piece, MoveFlag::EnPassant};
+    Undo ue = make_move(e, ep);
+    assert(e.piece_at(43) == Piece::W_pawn);
+    assert(e.piece_at(35) == Piece::No_piece);
+    unmake_move(e, ep, ue);
+    assert(e == e_before);
+    
 }

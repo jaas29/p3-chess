@@ -147,6 +147,11 @@ namespace chess
         const Bitboard white = b.color_pieces(Color::White);
         const Bitboard black = b.color_pieces(Color::Black);
         const Bitboard empty = ~(white | black);
+        Bitboard ep = 0;
+        if (b.ep_square != -1)
+        {
+            ep = square_mask(b.ep_square);
+        }
         if (side == Color::White)
         {
             const Bitboard pawns = b.pieces[static_cast<int>(Piece::W_pawn)];
@@ -154,6 +159,8 @@ namespace chess
             add_pawn_targets(white_pawn_double_pushes(pawns, empty), 16, MoveFlag::DoublePush, moves);
             add_pawn_targets(white_pawn_attacks_right(pawns) & black, 9, MoveFlag::Normal, moves);
             add_pawn_targets(white_pawn_attacks_left(pawns) & black, 7, MoveFlag::Normal, moves);
+            add_pawn_targets(white_pawn_attacks_right(pawns) & ep, 9, MoveFlag::EnPassant, moves);
+            add_pawn_targets(white_pawn_attacks_left(pawns) & ep, 7, MoveFlag::EnPassant, moves);
         }
         else
         {
@@ -163,6 +170,8 @@ namespace chess
             add_pawn_targets(black_pawn_double_pushes(pawns, empty), -16, MoveFlag::DoublePush, moves);
             add_pawn_targets(black_pawn_attacks_left(pawns) & white, -9, MoveFlag::Normal, moves);
             add_pawn_targets(black_pawn_attacks_right(pawns) & white, -7, MoveFlag::Normal, moves);
+            add_pawn_targets(black_pawn_attacks_left(pawns) & ep, -9, MoveFlag::EnPassant, moves);
+            add_pawn_targets(black_pawn_attacks_right(pawns) & ep, -7, MoveFlag::EnPassant, moves);
         }
     }
     inline std::vector<Move> generate_moves(const Board &b)
