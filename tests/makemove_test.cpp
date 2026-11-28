@@ -45,5 +45,13 @@ int main()
     assert(e.piece_at(35) == Piece::No_piece);
     unmake_move(e, ep, ue);
     assert(e == e_before);
-    
+    // a7a8=Q puts a queen on a8, and unmake brings the pawn back
+    Board q = Board::from_fen("8/P7/8/8/8/8/8/k6K w - - 0 1");
+    const Board q_before = q;
+    Move promo{48, 56, Piece::W_queen, MoveFlag::Normal};
+    Undo uq = make_move(q, promo);
+    assert(q.piece_at(56) == Piece::W_queen);
+    assert(q.piece_at(48) == Piece::No_piece);
+    unmake_move(q, promo, uq);
+    assert(q == q_before);
 }

@@ -37,7 +37,10 @@ namespace chess
             b.remove(u.captured, cap_sq);
         }
         b.remove(moving, m.from);
-        b.place(moving, m.to);
+        if (m.promotion != Piece::No_piece)
+            b.place(m.promotion, m.to); // the new piece lands, the pawn is gone
+        else
+            b.place(moving, m.to);
 
         // en passant lasts one move, unless this move is a double push
         b.ep_square = -1;
@@ -72,7 +75,15 @@ namespace chess
 
         const Piece moving = b.piece_at(m.to);
         b.remove(moving, m.to);
-        b.place(moving, m.from);
+        if (m.promotion != Piece::No_piece)
+        {
+            if (b.side_to_move == Color::White)
+                b.place(Piece::W_pawn, m.from);
+            else
+                b.place(Piece::B_pawn, m.from);
+        }
+        else
+            b.place(moving, m.from);
 
         // same as make: the side is flipped back, so side_to_move is the mover again
         int cap_sq = m.to;

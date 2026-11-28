@@ -137,7 +137,25 @@ namespace chess
         while (targets != 0)
         {
             const int to = std::countr_zero(targets);
-            moves.push_back(Move{to - offset, to, Piece::No_piece, flag});
+            const int from = to - offset;
+            if (to >= 56) // rank 8: only white pawns land here
+            {
+                moves.push_back(Move{from, to, Piece::W_queen, flag});
+                moves.push_back(Move{from, to, Piece::W_bishop, flag});
+                moves.push_back(Move{from, to, Piece::W_rook, flag});
+                moves.push_back(Move{from, to, Piece::W_knight, flag});
+            }
+            else if (to <= 7) // rank 1: only black pawns land here
+            {
+                moves.push_back(Move{from, to, Piece::B_queen, flag});
+                moves.push_back(Move{from, to, Piece::B_bishop, flag});
+                moves.push_back(Move{from, to, Piece::B_rook, flag});
+                moves.push_back(Move{from, to, Piece::B_knight, flag});
+            }
+            else
+            {
+                moves.push_back(Move{from, to, Piece::No_piece, flag});
+            }
             targets &= targets - 1;
         }
     }
